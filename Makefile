@@ -1,5 +1,5 @@
 LDLIBS  = -lglut -lGLU -lGL
-OBJS    = Main.o assist.o Stage1.o
+OBJS    = Main.o assist.o XMesh/XLoader.o Stage1.o
 PROGRAM = a.out
 
 all: $(PROGRAM)

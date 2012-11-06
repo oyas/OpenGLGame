@@ -97,7 +97,7 @@ void Disp(void)
 	//　モデルビュー行列の設定
 	glMatrixMode(GL_MODELVIEW);
 	Stage->Disp();	//ステージDisp()
-	
+  
 	//2Dへ
 	glMatrixMode(GL_PROJECTION); //PROJECTION行列を操作に変更
 	glPushMatrix(); //Push
@@ -110,7 +110,7 @@ void Disp(void)
 	glDisable(GL_LIGHTING);
 	glDisable(GL_LIGHT0);
 	//描画
-	Stage->Disp2D();	//ステージDisp2D()
+	Stage->Disp2D(WindowWidth, WindowHeight);	//ステージDisp2D()
 	//元に戻す
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
