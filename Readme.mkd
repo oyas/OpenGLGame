@@ -2,8 +2,12 @@ OpenGLの解説用
 
 コンパイル方法
 
-	$ g++ Main.cpp -lglut -lGLU -lGL
+	$ make
 
 実行
 
 	$ ./a.out
+
+実行ファイルやオブジェクトファイル（.o）などを消したい時
+
+	$ make clean

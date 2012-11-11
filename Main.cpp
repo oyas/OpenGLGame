@@ -92,7 +92,7 @@ void Disp(){
 	
 	// 箱を表示する
 	glTranslated(0.0, 0.0, -2.0);
-	glRotatef(5*lot, 0.0, 1.0, 0.5);	//y軸まわり回転
+	glRotatef(5*lot, 0.0, 1.0, 0.0);	//y軸まわり回転
 	glutSolidCube(1.0);	//箱
 	
 	lot++;	//回転角度を増やしていく
