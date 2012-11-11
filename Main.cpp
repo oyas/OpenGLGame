@@ -83,6 +83,12 @@ void Disp(){
 	//　バックバッファをクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	// モデルビュー行列の操作に切り替え
+	glMatrixMode(GL_MODELVIEW);
+	
+	// 初期化する（移動や回転などを最初の状態にする）
+	glLoadIdentity();	//（内部的にはMODELVIEW行列を単位行列にする）
+	
 	// 箱を表示する
 	glTranslated(0.0, 0.0, -2.0);
 	glutSolidCube(1.0);	//箱
