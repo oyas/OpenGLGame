@@ -10,6 +10,7 @@
 int WindowWidth = 400;	//ウィンドウ幅
 int WindowHeight = 400;	//ウィンドウ高さ
 const char WindowTitle[] = "OpenGLGame";	//ウィンドウタイトル
+int lot = 0;	//箱の回転角度
 
 //関数のプロトタイプ宣言
 void Init();
@@ -87,11 +88,14 @@ void Disp(){
 	glMatrixMode(GL_MODELVIEW);
 	
 	// 初期化する（移動や回転などを最初の状態にする）
-	glLoadIdentity();	//（内部的にはMODELVIEW行列を単位行列にする）
+	glLoadIdentity();
 	
 	// 箱を表示する
 	glTranslated(0.0, 0.0, -2.0);
+	glRotatef(5*lot, 0.0, 1.0, 0.5);	//y軸まわり回転
 	glutSolidCube(1.0);	//箱
+	
+	lot++;	//回転角度を増やしていく
 }
 
 // 画面描き換え
