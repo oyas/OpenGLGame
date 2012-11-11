@@ -77,14 +77,9 @@ void Display(){
 	//　バックバッファをクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	// 四角形を表示する
-	glBegin(GL_QUADS);
-	glNormal3d(0.0, 0.0, 1.0);	//法線指定（ライトを有効にしているので必要）
-	glVertex3f(0.2,  0.2, -1.0);
-	glVertex3f(-0.2, 0.2, -1.0);
-	glVertex3f(-0.2, -0.2, -1.0);
-	glVertex3f(0.2, -0.2, -1.0);
-	glEnd();
+	// 箱を表示する
+	glTranslated(0.0, 0.0, -2.0);
+	glutSolidCube(1.0);	//箱
 
 	//ダブルバッファ入れ替え
 	glutSwapBuffers();

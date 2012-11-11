@@ -1,3 +1,9 @@
 OpenGLの解説用
 
-記事　
+コンパイル方法
+
+	$ g++ Main.cpp -lglut -lGLU -lGL
+
+実行
+
+	$ ./a.out
