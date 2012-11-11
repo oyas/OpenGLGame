@@ -2,11 +2,13 @@ OpenGLの解説用
 
 コンパイル方法
 
-	$ make
+Ubuntu:	`$ make`
+Windows: `$ make win`
 
 実行
 
-	$ ./a.out
+Ubuntu: `$ ./a.out`
+Windows: `$ ./a.exe`
 
 実行ファイルやオブジェクトファイル（.o）などを消したい時
 
