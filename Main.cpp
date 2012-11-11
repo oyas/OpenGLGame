@@ -3,6 +3,9 @@
 #include <GL/freeglut.h>
 #include <cstdio>
 
+//定数定義
+#define TIMER_WAIT 33	//タイマーの待ち時間(画面の書き換え間隔)
+
 //グローバル変数の宣言
 int WindowWidth = 400;	//ウィンドウ幅
 int WindowHeight = 400;	//ウィンドウ高さ
@@ -10,11 +13,13 @@ const char WindowTitle[] = "OpenGLGame";	//ウィンドウタイトル
 
 //関数のプロトタイプ宣言
 void Init();
+void Disp();	//Display(), Timer() から呼ばれる。描画処理本体
 void Display();
 void Reshape(int x, int y);
 void Keyboard(unsigned char key, int x, int y);
 void KeyboardUp(unsigned char key, int x, int y);
 void Close();
+void Timer(int);
 
 
 
@@ -39,6 +44,7 @@ int main(int argc, char *argv[])
 	glutReshapeFunc(Reshape);	//ウィンドウサイズ変更時
 	glutKeyboardFunc(Keyboard);	//キー入力
 	glutKeyboardUpFunc(KeyboardUp);	//キーが離された
+	glutTimerFunc( TIMER_WAIT, Timer, 0);	//一定時間後に呼ばれる
 	
 	//初期化
 	Init();
@@ -73,16 +79,29 @@ void Init(void)
  *-----------------------------------------------------------------------------------*/
 
 // 画面描き換え
-void Display(){
+void Disp(){
 	//　バックバッファをクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// 箱を表示する
 	glTranslated(0.0, 0.0, -2.0);
 	glutSolidCube(1.0);	//箱
+}
 
+// 画面描き換え
+void Display(){
+	//描画
+	Disp();
 	//ダブルバッファ入れ替え
 	glutSwapBuffers();
+}
+
+
+// タイマー
+void Timer(int value){
+	glutTimerFunc( TIMER_WAIT, Timer, 0);	//次のタイマーをセット
+	glutSwapBuffers();	//ダブルバッファ入れ替え
+	Disp();	//次フレームの描画
 }
 
 // ウィンドウサイズ変更
