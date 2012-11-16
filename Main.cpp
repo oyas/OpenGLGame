@@ -21,6 +21,7 @@ void Keyboard(unsigned char key, int x, int y);
 void KeyboardUp(unsigned char key, int x, int y);
 void Close();
 void Timer(int);
+void Idle();
 
 
 
@@ -45,7 +46,8 @@ int main(int argc, char *argv[])
 	glutReshapeFunc(Reshape);	//ウィンドウサイズ変更時
 	glutKeyboardFunc(Keyboard);	//キー入力
 	glutKeyboardUpFunc(KeyboardUp);	//キーが離された
-	glutTimerFunc( TIMER_WAIT, Timer, 0);	//一定時間後に呼ばれる
+//	glutTimerFunc( TIMER_WAIT, Timer, 0);	//一定時間後に呼ばれる
+	glutIdleFunc( Idle );		//アイドル状態になったとき
 	
 	//初期化
 	Init();
@@ -119,6 +121,12 @@ void Timer(int value){
 	glutTimerFunc( TIMER_WAIT, Timer, 0);	//次のタイマーをセット
 	glutSwapBuffers();	//ダブルバッファ入れ替え
 	Disp();	//次フレームの描画
+}
+
+// アイドリング時の処理
+void Idle(void)
+{
+	glutPostRedisplay();	// 暇な時に再描画
 }
 
 // ウィンドウサイズ変更
