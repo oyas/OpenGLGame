@@ -1,7 +1,6 @@
 //Main.cpp
 
-#include <GL/freeglut.h>
-#include <cstdio>
+#include "assist.hpp"
 
 //定数定義
 #define TIMER_WAIT 33	//タイマーの待ち時間(画面の書き換え間隔)
@@ -11,6 +10,7 @@ int WindowWidth = 400;	//ウィンドウ幅
 int WindowHeight = 400;	//ウィンドウ高さ
 const char WindowTitle[] = "OpenGLGame";	//ウィンドウタイトル
 int lot = 0;	//箱の回転角度
+char *fpstxt, fpstxt_b[20] = "";	//fps表示用 fpstxt:fps()から返されるポインタ保存用 fpstest
 
 //関数のプロトタイプ宣言
 void Init();
@@ -96,6 +96,13 @@ void Disp(){
 	glutSolidCube(1.0);	//箱
 	
 	lot++;	//回転角度を増やしていく
+	
+	//FPS出力
+	fpstxt = fps();
+	if( strcmp(fpstxt, fpstxt_b) ){	//fpsの文字列が更新されたかチェック
+		strcpy(fpstxt_b, fpstxt);
+		printf("%s\n",fpstxt);
+	}
 }
 
 // 画面描き換え

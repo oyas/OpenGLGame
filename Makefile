@@ -1,5 +1,5 @@
 LDLIBS  = -lglut -lGLU -lGL
-OBJS    = Main.o
+OBJS    = Main.o assist.o
 PROGRAM = a.out
 LIBS_WIN      = -lopengl32 -lfreeglut -lglu32
 PROGRAM_WIN   = a.exe
