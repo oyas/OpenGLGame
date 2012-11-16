@@ -9,8 +9,6 @@
 int WindowWidth = 400;	//ウィンドウ幅
 int WindowHeight = 400;	//ウィンドウ高さ
 const char WindowTitle[] = "OpenGLGame";	//ウィンドウタイトル
-int lot = 0;	//箱の回転角度
-char *fpstxt, fpstxt_b[20] = "";	//fps表示用 fpstxt:fps()から返されるポインタ保存用 fpstest
 
 //関数のプロトタイプ宣言
 void Init();
@@ -21,7 +19,6 @@ void Keyboard(unsigned char key, int x, int y);
 void KeyboardUp(unsigned char key, int x, int y);
 void Close();
 void Timer(int);
-void Idle();
 
 
 
@@ -46,8 +43,7 @@ int main(int argc, char *argv[])
 	glutReshapeFunc(Reshape);	//ウィンドウサイズ変更時
 	glutKeyboardFunc(Keyboard);	//キー入力
 	glutKeyboardUpFunc(KeyboardUp);	//キーが離された
-//	glutTimerFunc( TIMER_WAIT, Timer, 0);	//一定時間後に呼ばれる
-	glutIdleFunc( Idle );		//アイドル状態になったとき
+	glutTimerFunc( TIMER_WAIT, Timer, 0);	//一定時間後に呼ばれる
 	
 	//初期化
 	Init();
@@ -89,22 +85,6 @@ void Disp(){
 	// モデルビュー行列の操作に切り替え
 	glMatrixMode(GL_MODELVIEW);
 	
-	// 初期化する（移動や回転などを最初の状態にする）
-	glLoadIdentity();
-	
-	// 箱を表示する
-	glTranslated(0.0, 0.0, -2.0);
-	glRotatef(5*lot, 0.0, 1.0, 0.0);	//y軸まわり回転
-	glutSolidCube(1.0);	//箱
-	
-	lot++;	//回転角度を増やしていく
-	
-	//FPS出力
-	fpstxt = fps();
-	if( strcmp(fpstxt, fpstxt_b) ){	//fpsの文字列が更新されたかチェック
-		strcpy(fpstxt_b, fpstxt);
-		printf("%s\n",fpstxt);
-	}
 }
 
 // 画面描き換え
@@ -121,12 +101,6 @@ void Timer(int value){
 	glutTimerFunc( TIMER_WAIT, Timer, 0);	//次のタイマーをセット
 	glutSwapBuffers();	//ダブルバッファ入れ替え
 	Disp();	//次フレームの描画
-}
-
-// アイドリング時の処理
-void Idle(void)
-{
-	glutPostRedisplay();	// 暇な時に再描画
 }
 
 // ウィンドウサイズ変更
