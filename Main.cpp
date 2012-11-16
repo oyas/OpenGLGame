@@ -1,14 +1,17 @@
 //Main.cpp
 
 #include "assist.hpp"
+#include "Stage1.hpp"	//最初のステージクラス
 
 //定数定義
 #define TIMER_WAIT 33	//タイマーの待ち時間(画面の書き換え間隔)
+#define FIRST_STAGECLASS Stage1()	//最初に呼ばれるステージクラス
 
 //グローバル変数の宣言
 int WindowWidth = 400;	//ウィンドウ幅
 int WindowHeight = 400;	//ウィンドウ高さ
 const char WindowTitle[] = "OpenGLGame";	//ウィンドウタイトル
+StageClass *Stage, *NextStage;	//ステージクラスのポインタ
 
 //関数のプロトタイプ宣言
 void Init();
@@ -19,6 +22,8 @@ void Keyboard(unsigned char key, int x, int y);
 void KeyboardUp(unsigned char key, int x, int y);
 void Close();
 void Timer(int);
+//void ChangeStage(StageClass* s);	//外部から呼ぶことがあるため宣言はassistの中
+void toNextStage();
 
 
 
@@ -70,6 +75,11 @@ void Init(void)
 	//片面表示（高速化のため）
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	
+	//最初のステージクラスをnewする
+	Stage = new FIRST_STAGECLASS;
+	//次のステージクラスはNULLにしとく
+	NextStage = NULL;
 }
 
 
@@ -77,7 +87,7 @@ void Init(void)
     画面描き換え
  *-----------------------------------------------------------------------------------*/
 
-// 画面描き換え
+// 描画処理本体
 void Disp(){
 	//　バックバッファをクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -85,6 +95,32 @@ void Disp(){
 	// モデルビュー行列の操作に切り替え
 	glMatrixMode(GL_MODELVIEW);
 	
+	Stage->Disp();	//ステージDisp()へ
+	
+	
+	//2Dへ移行
+	//PROJECTION行列を操作に変更
+	glMatrixMode(GL_PROJECTION); 
+	glPushMatrix(); //PROJECTION行列を保存
+	glLoadIdentity();
+	gluOrtho2D(0, WindowWidth, 0, WindowHeight); //ビューイング領域を設定(正射影で設定)
+	//MODELVIEW行列を操作
+	glMatrixMode(GL_MODELVIEW); 
+	glPushMatrix(); //MODELVIEW行列を保存
+	glLoadIdentity();
+	//いろいろ無効にする
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHT0);
+	//描画
+	Stage->Disp2D();	//ステージDisp2D()へ
+	//元に戻す（3D用へ戻る）
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glPopMatrix(); //MODELVIEW行列をもとに戻す
+	glMatrixMode(GL_PROJECTION); 
+	glPopMatrix(); //PROJECTION行列をもとに戻す
 }
 
 // 画面描き換え
@@ -93,6 +129,8 @@ void Display(){
 	Disp();
 	//ダブルバッファ入れ替え
 	glutSwapBuffers();
+	//ステージ変更処理
+	if( NextStage ) toNextStage();
 }
 
 
@@ -101,13 +139,15 @@ void Timer(int value){
 	glutTimerFunc( TIMER_WAIT, Timer, 0);	//次のタイマーをセット
 	glutSwapBuffers();	//ダブルバッファ入れ替え
 	Disp();	//次フレームの描画
+	
+	//ステージ変更処理
+	if( NextStage ) toNextStage();
 }
 
 // ウィンドウサイズ変更
 void Reshape(int x, int y)
 {
-	//　ウィンドウサイズを保存
-	// 今のとこは、保存する意味はないけど、将来つかうので
+	//　ウィンドウサイズを保存(Disp()でも使うため)
 	WindowWidth = x;
 	WindowHeight = y;
 	
@@ -127,6 +167,9 @@ void Reshape(int x, int y)
 // キーボード処理
 void Keyboard(unsigned char key, int x, int y)
 {
+	//ステージクラスへ
+	Stage->Input(SC_INPUT_KEY_DOWN, (int)key, x, y);
+	
 	switch ( key ){
 	case '\033':	//Esc
 		Close();
@@ -138,17 +181,34 @@ void Keyboard(unsigned char key, int x, int y)
 //キーが離された
 void KeyboardUp(unsigned char key, int x, int y)
 {
-	
+	Stage->Input(SC_INPUT_KEY_UP, (int)key, x, y);
 }
 
 /*-----------------------------------------------------------------------------------*
     その他
  *-----------------------------------------------------------------------------------*/
 
+//ステージ変更の受付
+//ここではまだ変更されない。次に呼ばれるtoNextStage()で変更が実施される
+void ChangeStage(StageClass* next)
+{
+	NextStage = next;
+}
+
+//次のステージへ変更処理
+void toNextStage(){
+	delete Stage;
+	Stage = NextStage;
+	NextStage = NULL;
+}
+
 // 終了処理
 void Close(void)
 {
 	printf("finish!\n");
+	
+	//ステージクラスを破棄する。デストラクタが呼ばれる。
+	delete Stage;
 }
 
 
