@@ -6,6 +6,7 @@
 #include <GL/freeglut.h>
 #include <cstdio>
 #include <cstring>
+#include "Model/XLoader.h"		//Xファイルロード系
 
 //定数
 #define SC_INPUT_KEY_DOWN 'e'	//'e'に意味はない。（定数だったらなんでもよい）

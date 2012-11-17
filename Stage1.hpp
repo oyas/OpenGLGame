@@ -12,7 +12,15 @@
  *-----------------------------------------------------------------------------------*/
 class Stage1 : public StageClass{
 private:
-	int lot;
+	//くねくね用
+	XModel model;		//Xモデルクラス
+	XObj kune;	//Xオブジェクト
+	
+	//ライト
+	GLfloat light0pos[4];	//ライトの位置
+	
+	//箱の回転
+	int rot;
 
 public:
 	//コンストラクタ
