@@ -55,3 +55,18 @@ void setDefaultMaterial(){
 }
 
 
+/*-----------------------------------------------------------------------------------*
+	文字描画
+	2D専用。描画位置と描画文字列、フォントを指定すると、描いてくれる。
+ *-----------------------------------------------------------------------------------*/
+void DRAW_STRING(int x, int y, char *string, void *font)
+{
+	int len, i;
+	
+	glRasterPos2f(x, y);	//書き始めの位置
+	len = (int)strlen(string);
+	for (i = 0; i < len; i++){
+		glutBitmapCharacter(font, string[i]);	//ビットマップフォントを使って文字描画（こいつが文字描画本体）
+	}
+}
+

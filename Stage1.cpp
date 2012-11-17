@@ -33,7 +33,9 @@ void Stage1::Disp()
 }
 
 //2Dの描画
-void Stage1::Disp2D(){
+void Stage1::Disp2D(int Width, int Height){
+	glColor4f(0.0,0.0,0.0, 1.0);	//カラー
+	DRAW_STRING(10, Height-30, fps(), GLUT_BITMAP_TIMES_ROMAN_24);	//FPS表示
 }
 
 //入力処理

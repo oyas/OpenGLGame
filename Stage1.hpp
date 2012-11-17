@@ -22,7 +22,7 @@ public:
 	virtual void Disp();
 	
 	//2D
-	virtual void Disp2D();
+	virtual void Disp2D(int Width, int Height);
 	
 	//入力処理
 	virtual void Input(char event, int key, int x, int y);

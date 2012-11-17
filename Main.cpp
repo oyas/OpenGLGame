@@ -113,7 +113,7 @@ void Disp(){
 	glDisable(GL_LIGHTING);
 	glDisable(GL_LIGHT0);
 	//描画
-	Stage->Disp2D();	//ステージDisp2D()へ
+	Stage->Disp2D(WindowWidth, WindowHeight);	//ステージDisp2D()へ
 	//元に戻す（3D用へ戻る）
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
