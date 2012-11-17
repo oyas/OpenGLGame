@@ -26,7 +26,14 @@ void Stage1::Disp2D(){
 
 //入力処理
 void Stage1::Input(char event, int key, int x, int y){
-	
+	switch(event){
+	case SC_INPUT_KEY_DOWN:	//キーが押されたとき
+		printf("%cが押された!\n", key);
+		break;
+	case SC_INPUT_KEY_UP:	//キーが離されたとき
+		printf("%cが離された!\n", key);
+		break;
+	}
 }
 
 //デストラクタ（終了処理）
