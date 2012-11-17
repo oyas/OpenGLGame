@@ -19,6 +19,9 @@ private:
 	//ライト
 	GLfloat light0pos[4];	//ライトの位置
 	
+	//床クラス
+	Ita ita;
+	
 	//箱の回転
 	int rot;
 

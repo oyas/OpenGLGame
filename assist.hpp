@@ -78,4 +78,22 @@ void setDefaultMaterial();
 void DRAW_STRING(int x, int y, char *string, void *font);
 
 
+/*-----------------------------------------------------------------------------------*
+	床クラス
+	床を表示&管理する
+ *-----------------------------------------------------------------------------------*/
+class Ita{
+private:
+	GLuint DisplayList;	//ディスプレイリスト
+	void SetRender(float u, float v);	//ディスプレイリスト作成
+public:
+	Vector2 size;	//床のサイズ
+	Vector3 pos;		//床の位置
+	Vector3 vertex[4];	//当たり判定にでも使うとよい
+	
+	Ita(float u, float v);		//コンストラクタ
+	void Render();	//描画
+};
+
+
 #endif	//_ASSIST_HPP
