@@ -1,4 +1,4 @@
-//stage1.cpp
+//Stage1.cpp
 
 
 #include "Stage1.hpp"
@@ -28,6 +28,9 @@ void Stage1::Disp2D(){
 void Stage1::Input(char event, int key, int x, int y){
 	switch(event){
 	case SC_INPUT_KEY_DOWN:	//キーが押されたとき
+		if( key == ' ' ){	//スペースキーが押された時
+			ChangeStage( new Stage2 );	//ステージ変更
+		}
 		printf("%cが押された!\n", key);
 		break;
 	case SC_INPUT_KEY_UP:	//キーが離されたとき

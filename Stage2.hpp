@@ -1,22 +1,23 @@
-//Stage1.hpp
-#ifndef _STAGE1_HPP
-#define _STAGE1_HPP
+//Stage2.hpp
+#ifndef _STAGE2_HPP
+#define _STAGE2_HPP
 
 //インクロード
 #include "assist.hpp"
-#include "Stage2.hpp"	//次のステージ
+#include "Stage1.hpp"	//次のステージ
 
 
 /*-----------------------------------------------------------------------------------*
-	ステージ１　クラス
+	ステージ2　クラス
 	Main.cppでインスタンスが作られ関数が呼ばれる
  *-----------------------------------------------------------------------------------*/
-class Stage1 : public StageClass{
+class Stage2 : public StageClass{
 private:
+	int lot;
 
 public:
 	//コンストラクタ
-	Stage1();
+	Stage2();
 	
 	//画面再描画時によばれる(1フレーム毎に呼ばれる)
 	virtual void Disp();
@@ -28,8 +29,8 @@ public:
 	virtual void Input(char event, int key, int x, int y);
 	
 	//デストラクタ
-	virtual ~Stage1();
+	virtual ~Stage2();
 };
 
 
-#endif	//_STAGE1_HPP
+#endif	//_STAGE2_HPP

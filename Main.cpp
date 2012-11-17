@@ -170,6 +170,9 @@ void Keyboard(unsigned char key, int x, int y)
 	//ステージクラスへ
 	Stage->Input(SC_INPUT_KEY_DOWN, (int)key, x, y);
 	
+	//ステージ変更処理
+	if( NextStage ) toNextStage();
+	
 	switch ( key ){
 	case '\033':	//Esc
 		Close();
@@ -182,6 +185,9 @@ void Keyboard(unsigned char key, int x, int y)
 void KeyboardUp(unsigned char key, int x, int y)
 {
 	Stage->Input(SC_INPUT_KEY_UP, (int)key, x, y);
+	
+	//ステージ変更処理
+	if( NextStage ) toNextStage();
 }
 
 /*-----------------------------------------------------------------------------------*
