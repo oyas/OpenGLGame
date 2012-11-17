@@ -22,3 +22,36 @@ char* fps(void)
 	
 	return txt_fps;
 }
+
+
+/*-----------------------------------------------------------------------------------*
+	デフォルトマテリアルセット
+	マテリアルをデフォルト値に戻す。カラーは白がセットされる
+	参考：http://wisdom.sakura.ne.jp/system/opengl/gl16.html
+ *-----------------------------------------------------------------------------------*/
+void setDefaultMaterial(){
+	//デフォルトマテリアル
+	GLfloat defoma_a[4] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat defoma_d[4] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat defoma_i[4] = { 0.0, 0.0, 0.0, 1.0 };
+	
+	//　基本色
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+
+	//　Ambient Color
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, defoma_a);
+	
+	//　Diffuse Color
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, defoma_d);
+
+	//　Specular Color
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, defoma_i);
+
+	//　Emissive Color
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, defoma_i);
+
+	//　Shininess
+	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 0);
+}
+
+
