@@ -104,7 +104,7 @@ XModel::XModel()
 //--------------------------------------------------------------------------------------------------
 bool XModel::Load(char *filename, bool AnimOnly)
 {	
-	printf("Xファイル読み込み開始: %s\n", filename);
+//	printf("Xファイル読み込み開始: %s\n", filename);
 	
 	//ファイル読み込み
 	std::ifstream ifs( filename );
@@ -195,9 +195,9 @@ bool XModel::Load(char *filename, bool AnimOnly)
 	}
 	
 	//デバッグ用
-	printf("numOFaces %i\n", numOFaces);
-	printf("numFaces %i\n", numFaces);
-	printf("bTexture = %s\n", (bTexture?"true":"false") );
+//	printf("numOFaces %i\n", numOFaces);
+//	printf("numFaces %i\n", numFaces);
+//	printf("bTexture = %s\n", (bTexture?"true":"false") );
 	
 #if USE_VBO
 	//VBO作成
@@ -229,7 +229,7 @@ bool XModel::Load_element()
 		//　Meshの場合
 		else if ( CheckToken("Mesh") )
 		{
-			printf("Mesh 読み込み開始\n");
+//			printf("Mesh 読み込み開始\n");
 			if(loaded & 2){	//Mesh は 2
 				cout << "Error : Mesh はすでに読み込んでいます。\n" << endl;
 				return false;
@@ -360,7 +360,7 @@ bool XModel::Load_element()
 		//　MeshNormalsの場合
 		else if ( CheckToken("MeshNormals") )
 		{
-			printf("MeshNormals 読み込み開始\n");
+//			printf("MeshNormals 読み込み開始\n");
 			if(loaded & 4){	//Mesh は 4
 				cout << "Error : MeshNormals はすでに読み込んでいます。\n" << endl;
 				return false;
@@ -460,7 +460,7 @@ bool XModel::Load_element()
 		//　MeshTextureCoordsの場合 メッシュテクスチャ座標
 		else if ( CheckToken("MeshTextureCoords") )
 		{
-			printf("MeshTextureCoords 読み込み開始\n");
+//			printf("MeshTextureCoords 読み込み開始\n");
 			if(loaded & 8){	//MeshTextureCoords は 8
 				cout << "Error : MeshTextureCoords はすでに読み込んでいます。\n" << endl;
 				return false;
@@ -498,7 +498,7 @@ bool XModel::Load_element()
 		//　MeshMaterialListの場合 メッシュマテリアルリスト & マテリアル
 		else if ( CheckToken("MeshMaterialList") )
 		{
-			printf("MeshMaterialList 読み込み開始\n");
+//			printf("MeshMaterialList 読み込み開始\n");
 			if(loaded & 16){	//MeshMaterialList は 16
 				cout << "Error : MeshMaterialList はすでに読み込んでいます。\n" << endl;
 				return false;
@@ -555,7 +555,7 @@ bool XModel::Load_element()
 			// Material マテリアル読み込み
 			for ( int i=0; i<numMaterials; i++ )
 			{
-				printf("Material %d 読み込み開始\n",i);
+//				printf("Material %d 読み込み開始\n",i);
 				
 				//　トークンを取得
 				GetToken("Material");
@@ -632,7 +632,7 @@ bool XModel::Load_element()
 					//ファイル名を作る
 					char texfilename[strlen(filedir)+strlen(tfname)+1];
 					texfilename[0]='\0'; strcat(texfilename, filedir); strcat(texfilename, tfname);
-				printf("tesfilename: %s\n",texfilename);
+//				printf("tesfilename: %s\n",texfilename);
 					//テクスチャ読み込み
 					pngInfo info;
 					material[i].texture = pngBind(texfilename, PNG_NOMIPMAP, PNG_ALPHA, &info, GL_CLAMP, GL_NEAREST, GL_NEAREST);
@@ -649,7 +649,7 @@ bool XModel::Load_element()
 		// Frame　フレームの場合
 		else if( CheckToken("Frame") )
 		{
-			printf("Frame 読み込み開始\n");
+//			printf("Frame 読み込み開始\n");
 			//Xファイル内に複数のルートフレームがある場合、エラーを返す
 			if( !Frame.empty() ){
 				cout << "Error : 複数のルートフレームがあります\n" << endl;
@@ -700,7 +700,7 @@ bool XModel::Load_element()
  *-----------------------------------------------------------------------------------*/
 bool XModel::Load_AnimationSet()
 {
-	printf("AnimationSet 読み込み開始\n");
+//	printf("AnimationSet 読み込み開始\n");
 	
 	//XAnimationクラスのインスタンス作成
 	XAnimation* anim=new XAnimation();
@@ -774,11 +774,11 @@ bool XModel::Load_AnimationSet()
 bool XModel::Load_SkinWeights()
 {
 	
-				printf("SkinWeights 読み込み開始");
+//				printf("SkinWeights 読み込み開始");
 				GetToken("{");
 				
 				GetToken();	//フレーム名取得
-				printf(" Frame名：%s\n",Token);
+//				printf(" Frame名：%s\n",Token);
 				//フレーム検索
 				XFrame* frame=FindFrame(Token);
 				//フレームが見つかった場合
@@ -834,23 +834,23 @@ XFrame* XModel::FindFrame(const char* name) {
 
 //デストラクタ
 XMaterial::~XMaterial(){
-	printf("~XMaterial ");
+//	printf("~XMaterial ");
 	delete [] name;
 #if USE_TEXTURE
 	delete [] textureFileName;
 #endif
-	printf("~XMaterial\n");
+//	printf("~XMaterial\n");
 }
 
 //デストラクタ
 /*XMesh::~XMesh(){
-	printf("~XMesh\n");
+//	printf("~XMesh\n");
 	delete [] name;
 }*/
 
 //デストラクタ
 XModel::~XModel(){
-	printf("~XModel ");
+//	printf("~XModel ");
 	delete [] oVertex;
 	delete [] aVertex;
 	delete [] face;
@@ -861,7 +861,7 @@ XModel::~XModel(){
 		delete Animation[i];
 	delete [] OFaceFour;
 	delete [] filedir;
-	printf("~XModel\n");
+//	printf("~XModel\n");
 }
 
 
@@ -955,7 +955,7 @@ void XModel::Render(float scale)
 	ディスプレイリストを作る。Load()内で呼ばれる。
  *-----------------------------------------------------------------------------------*/
 void XModel::SetDListRender(float scale){
-	printf("SetDListRender\n");
+//	printf("SetDListRender\n");
 	if(!Animation.empty()){
 		Animation[0]->time = 10.0;
 		Animation[0]->weight = 1.0;

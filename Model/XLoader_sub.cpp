@@ -402,10 +402,10 @@ void XModel::SetVBORender()
 	// バッファー作成。頂点座標、法線、UV座標のバッファー
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	printf("check1\n");
+//	printf("check1\n");
 	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(ANIMATED_VERTEX), aVertex, GL_STREAM_DRAW);
 	
-	printf("check2\n");
+//	printf("check2\n");
 	
 	// インデックスバッファの作成
 	glGenBuffers(1, &indexBuffer);
@@ -571,7 +571,7 @@ XAnimation::XAnimation(){
 
 //デストラクタ
 XAnimation::~XAnimation(){
-	printf("~XAnimation\n");
+//	printf("~XAnimation\n");
 	delete [] name;
 	for(int i=0;i<key.size();i++)
 		delete key[i];
@@ -588,7 +588,7 @@ XAnimationKey::XAnimationKey(){
 
 //デストラクタ
 XAnimationKey::~XAnimationKey(){
-	printf("~XAnimationKey\n");
+//	printf("~XAnimationKey\n");
 	delete [] frameName;
 	for(int i=0;i<matrix.size();i++)
 		delete matrix[i];
