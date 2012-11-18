@@ -33,6 +33,14 @@ private:
 	float rot;	//回転角度
 	Vector3 pos[BOX_MAX];
 	
+	//得点用
+	int score;
+	char str_score[20];
+	
+	//タイマー
+	int timer;
+	char str_timer[20];
+	
 public:
 	//コンストラクタ
 	Stage1();

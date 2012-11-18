@@ -10,6 +10,7 @@
 #define KUNE_CAMRA 2.0	//回転量(単位は度)
 #define GAME_GRAVITY 0.02	//重力
 #define JUMP_SPEED 0.3	//ジャンプ力
+#define GAME_TIMER 1000	//タイムオーバーまでの時間
 
 
 //////////////////////
@@ -66,6 +67,14 @@ Stage1::Stage1() : ita(ITA_SIZE, ITA_SIZE)
 		pos[a].y = ((float)rand() / (float)RAND_MAX) * 3.0 + 0.5;
 		pos[a].z = ((float)rand() / (float)RAND_MAX) * ITA_SIZE - ITA_SIZE/2.0;
 	}
+	
+	//スコア初期化
+	score = 0;
+	str_score[0] = '\0';	//手抜き初期化
+	
+	//タイマー初期化
+	timer = GAME_TIMER;
+	str_timer[0] = '\0';
 }
 
 
@@ -174,16 +183,27 @@ void Stage1::Disp()
 			pos[a].x = ((float)rand() / (float)RAND_MAX) * ITA_SIZE - ITA_SIZE/2.0;
 			pos[a].y = ((float)rand() / (float)RAND_MAX) * 3.0 + 0.5;
 			pos[a].z = ((float)rand() / (float)RAND_MAX) * ITA_SIZE - ITA_SIZE/2.0;
+			//得点加算
+			if(timer >= 0) score++;
+			sprintf(str_score, "SCORE : %d", score );
 		}
 	}
 	rot++;
 	
+	//タイマー
+	if( timer-- < 0 ){
+		sprintf(str_timer, "TIME OVER");
+	}else{
+		sprintf(str_timer, "TIME : %d", timer);
+	}
 }
 
 //2Dの描画
 void Stage1::Disp2D(int Width, int Height){
 	glColor4f(0.0,0.0,0.0, 1.0);	//カラー
 	DRAW_STRING(10, Height-30, fps(), GLUT_BITMAP_TIMES_ROMAN_24);	//FPS表示
+	DRAW_STRING(10, Height-50, str_score, GLUT_BITMAP_TIMES_ROMAN_24);	//得点表示
+	DRAW_STRING(10, Height-70, str_timer, GLUT_BITMAP_TIMES_ROMAN_24);	//タイマー表示
 }
 
 //入力処理
