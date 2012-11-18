@@ -132,3 +132,57 @@ void Ita::Render(){
 	glPopMatrix();
 }
 
+
+/*-----------------------------------------------------------------------------------*
+	キー入力補助
+	KeyBufのKeysと対応するビットを変更する。
+	例：
+	Keys = { a, b, c, d }　とする。
+	KeyBufの中身は、２進数(実際のメモリ配置)で表すと
+	00100000 00000000 00000000 00000000 (32ビット)
+	abcd
+	１ビットづつ順番にa,b,c,dと割り当て、そのビットが1か0かでキーの状態を保存する。
+	KeyBufが上記の時は、cは押されていて、他のキーは離されている。
+ *-----------------------------------------------------------------------------------*/
+//KeyBufの状態を変更する。
+bool SetKeyState(int *KeyBuf, int key, bool onoff, int *Keys, int size)
+{
+	//サイズを要素数に変換	
+	size /= sizeof(int);
+
+	//サイズが大き過ぎないかチェック
+	if( size >= sizeof(int)*8 )
+		return false;
+	
+	//サイズ分処理
+	for(int i=0; i<size; i++){
+		if( key == Keys[i] ){
+			int k=1;
+			if( onoff )
+				*KeyBuf |= k << i;	//ビットON
+			else
+				*KeyBuf &= ~( k << i );	//ビットOFF
+		}
+	}
+	
+	return true;
+}
+
+//状態を取得。押されていたらtrue
+bool GetKeyState(int *KeyBuf, int key, int *Keys, int size)
+{
+	//サイズが大き過ぎないかチェック
+	if( size >= sizeof(int)*8 )
+		return false;
+	
+	//サイズ分処理
+	for(int i=0; i<size; i++){
+		if( key == Keys[i] ){
+			int k=1;
+			return *KeyBuf & (k<<i);
+		}
+	}
+	
+	return true;
+}
+

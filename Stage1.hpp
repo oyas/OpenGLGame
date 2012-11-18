@@ -24,7 +24,13 @@ private:
 	
 	//箱の回転
 	int rot;
-
+	
+	//キーの状態
+	int key_on;
+	
+	//画面表示用文字列
+	char str[20];
+	
 public:
 	//コンストラクタ
 	Stage1();

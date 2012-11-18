@@ -96,4 +96,19 @@ public:
 };
 
 
+/*-----------------------------------------------------------------------------------*
+	キー入力補助
+	KeyBuf: キーの入力状態をもつ変数。Keys配列の番号と対応するビットがそのキーの状態を表す。
+	key: 状態を変更したいキー、または調べたいキーを指定する。
+	onoff: 状態変更。true=押された false=離された
+	Keys: 状態を知りたいキーの配列。
+	size: Keysのサイズ。
+ *-----------------------------------------------------------------------------------*/
+//KeyBufのビットを変更する。
+bool SetKeyState(int *KeyBuf, int key, bool onoff, int *Keys, int size);
+
+//状態を取得。押されていたらtrue
+bool GetKeyState(int *KeyBuf, int key, int *Keys, int size);	//自前でKeyBufのビットを調べることをおすすめする。
+
+
 #endif	//_ASSIST_HPP

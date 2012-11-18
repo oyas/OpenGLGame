@@ -6,6 +6,25 @@
 //定数定義
 #define ITA_SIZE 24.0	//床の大きさ
 
+
+//////////////////////
+//チェックするキー
+//2のn乗の数を使う。(ビットと対応)
+//新しく追加するときは、defineで定義して、Keys[]にも登録する。
+#define KEY_A 1		// = 10000000 …
+#define KEY_D 2		// = 01000000 …
+#define KEY_W 4		// = 00100000 …
+#define KEY_S 8
+#define KEY_SPACE 16
+
+static int Keys[] = {	//チェックするキーの登録
+		'a',	//1
+		'd',	//2
+		'w',	//4
+		's',	//8
+		' '		//16
+};
+
 /*-----------------------------------------------------------------------------------*
 	ステージ1 クラス
  *-----------------------------------------------------------------------------------*/
@@ -28,6 +47,8 @@ Stage1::Stage1() : ita(ITA_SIZE, ITA_SIZE)
 	//箱の回転角度初期化
 	rot = 0;
 	
+	//キー
+	key_on=0;
 }
 
 
@@ -58,22 +79,28 @@ void Stage1::Disp()
 	
 	rot++;	//回転角度を増やしていく
 	
+	if( key_on & KEY_SPACE ){	//キーのチェック
+		sprintf(str, "SPACE ON");
+	}else{
+		sprintf(str, "SPACE OFF");
+	}
 }
 
 //2Dの描画
 void Stage1::Disp2D(int Width, int Height){
 	glColor4f(0.0,0.0,0.0, 1.0);	//カラー
 	DRAW_STRING(10, Height-30, fps(), GLUT_BITMAP_TIMES_ROMAN_24);	//FPS表示
+	DRAW_STRING(10, Height-50, str, GLUT_BITMAP_TIMES_ROMAN_24);	//スペースキーの状態表示
 }
 
 //入力処理
 void Stage1::Input(char event, int key, int x, int y){
 	switch(event){
 	case SC_INPUT_KEY_DOWN:	//キーが押されたとき
-		printf("%cが押された!\n", key);
+		SetKeyState(&key_on, key, true, Keys, sizeof(Keys) );
 		break;
 	case SC_INPUT_KEY_UP:	//キーが離されたとき
-		printf("%cが離された!\n", key);
+		SetKeyState(&key_on, key, false, Keys, sizeof(Keys) );
 		break;
 	}
 }
