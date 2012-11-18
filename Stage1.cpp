@@ -5,6 +5,7 @@
 
 //定数定義
 #define ITA_SIZE 24.0	//床の大きさ
+#define KUNE_IDORYOU 0.2	//くねくね移動時の移動量
 
 
 //////////////////////
@@ -37,6 +38,7 @@ Stage1::Stage1() : ita(ITA_SIZE, ITA_SIZE)
 	model.Load(a, false);
 	//Xオブジェクト作成
 	kune.setXModel(&model);
+	kune.offset.y=-0.2;
 	
 	//ライトの位置セット
 	light0pos[0] = 1.0;
@@ -61,7 +63,26 @@ void Stage1::Disp()
 	glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
 	
 	//カメラの位置セット
-	gluLookAt(0.0,5.0,15.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
+	gluLookAt(0.0,5.0,-15.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
+	
+	//移動させる
+	kune.force = 0.0;
+	if( key_on & KEY_W ){	//前へ
+		kune.force.z += KUNE_IDORYOU;
+	}
+	if( key_on & KEY_S ){	//後ろへ
+		kune.force.z -= KUNE_IDORYOU;
+	}
+	if( key_on & KEY_A ){	//左へ
+		kune.force.x += KUNE_IDORYOU;
+	}
+	if( key_on & KEY_D ){	//右へ
+		kune.force.x -= KUNE_IDORYOU;
+	}
+	
+	//適用
+	kune.pos += kune.force;
+	
 	
 	//床表示
 	ita.Render();
