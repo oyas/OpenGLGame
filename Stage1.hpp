@@ -16,6 +16,7 @@ private:
 	XModel model;		//Xモデルクラス
 	XObj kune;	//Xオブジェクト
 	Vector3 kune_vec;	//前方向の向き(移動時に使用)vector
+	int onface;	//着地しているかどうか
 	
 	//ライト
 	GLfloat light0pos[4];	//ライトの位置

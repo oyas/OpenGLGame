@@ -7,6 +7,8 @@
 #define ITA_SIZE 24.0	//床の大きさ
 #define KUNE_IDORYOU 0.2	//くねくね移動時の移動量
 #define KUNE_CAMRA 2.0	//回転量(単位は度)
+#define GAME_GRAVITY 0.02	//重力
+#define JUMP_SPEED 0.3	//ジャンプ力
 
 
 //////////////////////
@@ -91,19 +93,49 @@ void Stage1::Disp()
 		kune_vec.z = cos(kune.angle.y/180 * M_PI);
 	}
 	
-	Vector3 speed = kune.force;
-	//床のそとへ出れないようにする
-	if( -(ITA_SIZE / 2) > kune.pos.x + speed.x )
-		speed.x += -(ITA_SIZE / 2) - (kune.pos.x + speed.x);
-	if( kune.pos.x + speed.x > ITA_SIZE / 2 )
-		speed.x -= (kune.pos.x + speed.x) - (ITA_SIZE / 2);
-	if( -(ITA_SIZE / 2) > kune.pos.z + speed.z )
-		speed.z += -(ITA_SIZE / 2) - (kune.pos.z + speed.z);
-	if( kune.pos.z + speed.z > ITA_SIZE / 2 ) 
-		speed.z -= (kune.pos.z + speed.z) - (ITA_SIZE / 2);
+	//ジャンプ
+	if( key_on & KEY_SPACE && onface){	//スペースが押されて、接地しているとき
+			kune.speed.y += JUMP_SPEED;
+	}
 	
-	//適用
-	kune.pos += speed;
+	//救出(下に落ちた場合の処理)
+	if(kune.pos.y < -50.0){
+			//初期位置へ戻す
+			kune.pos.x = 0.0;
+			kune.pos.y = 10.0;
+			kune.pos.z = 0.0;
+			kune.speed = 0.0;
+	}
+	
+	//当たり判定 物理処理等
+	{		
+		kune.speed.y -= GAME_GRAVITY;	//重力
+		Vector3 speed = kune.speed;	//当たり判定用にコピー
+		
+		//forceをspeedに適用する。意外と適当。
+		if( (kune.force.x<0 && speed.x>kune.force.x)||(kune.force.x>0 && speed.x<kune.force.x) ) speed.x = kune.force.x;
+		if( (kune.force.y<0 && speed.y>kune.force.y)||(kune.force.y>0 && speed.y<kune.force.y) ) speed.y = kune.force.y;
+		if( (kune.force.z<0 && speed.z>kune.force.z)||(kune.force.z>0 && speed.z<kune.force.z) ) speed.z = kune.force.z;
+		
+		Vector3 bspeed = speed;	//当たり判定前のspeedを保存
+		
+		//床との当たり判定
+		if( -(ITA_SIZE / 2) < kune.pos.x + speed.x && kune.pos.x + speed.x < ITA_SIZE / 2 && //くねくねが床の領域内で
+			-(ITA_SIZE / 2) < kune.pos.z + speed.z && kune.pos.z + speed.z < ITA_SIZE / 2 && 
+			kune.pos.y >= 0.0 && kune.pos.y + speed.y < 0.0 ){		//床を通過するようなspeedの時
+			speed.y = -kune.pos.y;	//床を通過しないように調整
+			kune.speed = 0.0;	//床にぶつかったので、0にする
+		}
+		
+		//接地しているか判定
+		if( speed.y-bspeed.y != 0.0){	//接地している＝当たり判定によりy方向のスピードが変化した
+			onface = 1;
+		}else{
+			onface = 0;
+		}
+		
+		kune.pos += speed;	//適用
+	}
 	
 	
 	//床表示
