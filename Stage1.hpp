@@ -15,6 +15,7 @@ private:
 	//くねくね用
 	XModel model;		//Xモデルクラス
 	XObj kune;	//Xオブジェクト
+	Vector3 kune_vec;	//前方向の向き(移動時に使用)vector
 	
 	//ライト
 	GLfloat light0pos[4];	//ライトの位置

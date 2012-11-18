@@ -6,6 +6,7 @@
 //定数定義
 #define ITA_SIZE 24.0	//床の大きさ
 #define KUNE_IDORYOU 0.2	//くねくね移動時の移動量
+#define KUNE_KAITEN 2.0	//回転量(単位は度)
 
 
 //////////////////////
@@ -39,6 +40,8 @@ Stage1::Stage1() : ita(ITA_SIZE, ITA_SIZE)
 	//Xオブジェクト作成
 	kune.setXModel(&model);
 	kune.offset.y=-0.2;
+	//初期化
+	kune_vec.x=0.0; kune_vec.y=0.0; kune_vec.z=1.0;	//くねくねの前方向ベクトル
 	
 	//ライトの位置セット
 	light0pos[0] = 1.0;
@@ -68,16 +71,20 @@ void Stage1::Disp()
 	//移動させる
 	kune.force = 0.0;
 	if( key_on & KEY_W ){	//前へ
-		kune.force.z += KUNE_IDORYOU;
+		kune.force += kune_vec * KUNE_IDORYOU;
 	}
 	if( key_on & KEY_S ){	//後ろへ
-		kune.force.z -= KUNE_IDORYOU;
+		kune.force -= kune_vec * KUNE_IDORYOU;
 	}
-	if( key_on & KEY_A ){	//左へ
-		kune.force.x += KUNE_IDORYOU;
+	if( key_on & KEY_A ){	//左回転
+		kune.angle.y += KUNE_KAITEN;	//くねくねを回転
+		kune_vec.x = sin(kune.angle.y/180 * M_PI);	//前方向ベクトルを修正「/180*M_PI」で度→radへ変換
+		kune_vec.z = cos(kune.angle.y/180 * M_PI);
 	}
-	if( key_on & KEY_D ){	//右へ
-		kune.force.x -= KUNE_IDORYOU;
+	if( key_on & KEY_D ){	//右回転
+		kune.angle.y -= KUNE_KAITEN;
+		kune_vec.x = sin(kune.angle.y/180 * M_PI);
+		kune_vec.z = cos(kune.angle.y/180 * M_PI);
 	}
 	
 	//適用
