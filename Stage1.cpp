@@ -63,7 +63,7 @@ void Stage1::Disp()
 	glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
 	
 	//カメラの位置セット
-	gluLookAt(0.0,5.0,-15.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
+	gluLookAt(0.0,5.0,-15.0, kune.pos.x,kune.pos.y,kune.pos.z, 0.0,1.0,0.0);
 	
 	//移動させる
 	kune.force = 0.0;
