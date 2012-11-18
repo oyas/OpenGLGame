@@ -91,8 +91,19 @@ void Stage1::Disp()
 		kune_vec.z = cos(kune.angle.y/180 * M_PI);
 	}
 	
+	Vector3 speed = kune.force;
+	//床のそとへ出れないようにする
+	if( -(ITA_SIZE / 2) > kune.pos.x + speed.x )
+		speed.x += -(ITA_SIZE / 2) - (kune.pos.x + speed.x);
+	if( kune.pos.x + speed.x > ITA_SIZE / 2 )
+		speed.x -= (kune.pos.x + speed.x) - (ITA_SIZE / 2);
+	if( -(ITA_SIZE / 2) > kune.pos.z + speed.z )
+		speed.z += -(ITA_SIZE / 2) - (kune.pos.z + speed.z);
+	if( kune.pos.z + speed.z > ITA_SIZE / 2 ) 
+		speed.z -= (kune.pos.z + speed.z) - (ITA_SIZE / 2);
+	
 	//適用
-	kune.pos += kune.force;
+	kune.pos += speed;
 	
 	
 	//床表示
