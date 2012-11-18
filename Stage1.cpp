@@ -2,6 +2,7 @@
 
 
 #include "Stage1.hpp"
+#include<time.h>	//乱数初期化時に使用
 
 //定数定義
 #define ITA_SIZE 24.0	//床の大きさ
@@ -36,6 +37,9 @@ static int Keys[] = {	//チェックするキーの登録
 //コンストラクタ（初期化）
 Stage1::Stage1() : ita(ITA_SIZE, ITA_SIZE)
 {
+	//乱数初期化
+	srand((unsigned)time(NULL));
+	
 	//くねくねの読み込み
 	char a[]="Model/anim2.x";
 	model.Load(a, false);
@@ -51,11 +55,17 @@ Stage1::Stage1() : ita(ITA_SIZE, ITA_SIZE)
 	light0pos[2] = 5.0;
 	light0pos[3] = 1.0;
 	
-	//箱の回転角度初期化
-	rot = 0;
-	
 	//キー
 	key_on=0;
+	
+	//浮遊する箱
+	rot = 0.0;	//箱の回転角度初期化
+	for(int a=0; a<BOX_MAX; a++){
+		//初期位置決定
+		pos[a].x = ((float)rand() / (float)RAND_MAX) * ITA_SIZE - ITA_SIZE/2.0;
+		pos[a].y = ((float)rand() / (float)RAND_MAX) * 3.0 + 0.5;
+		pos[a].z = ((float)rand() / (float)RAND_MAX) * ITA_SIZE - ITA_SIZE/2.0;
+	}
 }
 
 
@@ -143,32 +153,37 @@ void Stage1::Disp()
 	//くねくねを表示する
 	kune.Render();
 	
-	// 箱を表示する
+	//浮遊する箱
 	//赤色のマテリアルをセット
 	setDefaultMaterial();
 	GLfloat color[4] = { 1.0, 0.0, 0.0, 1.0 };
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
-	glTranslated(0.0, 0.0, -2.0);
-	glRotatef(5*rot, 0.0, 1.0, 0.0);	//y軸まわり回転
-	glutSolidCube(1.0);	//箱
-	
-	rot++;	//回転角度を増やしていく
-	
-	//箱との当たり判定
-	Vector3 v = {0.0, 0.0, -2.0};
-	v -= kune.pos;
-	if( sqrt( v.x*v.x + v.y*v.y + v.z*v.z ) < 1.0 ){
-		sprintf(str, "hit!");
-	}else{
-		sprintf(str, "distant");
+	//すべての箱について処理
+	for(int a=0; a<BOX_MAX; a++){
+		//箱描画
+		glPushMatrix(); //Push
+		glTranslated(pos[a].x, pos[a].y, pos[a].z);
+		glRotatef(rot, 0.0, 1.0, 0.0);	//y軸まわり回転
+		glutSolidCube(1.0);	//箱
+		glPopMatrix(); //Pop
+		//当たり判定
+		Vector3 v = pos[a] - kune.pos;
+		v.y -= 0.5;	//位置調整。くねくねの原点は根本にあるため
+		if( sqrt( v.x*v.x + v.y*v.y + v.z*v.z ) < 1.0 ){	//当たっていたら
+			//新しい位置へ置き換える
+			pos[a].x = ((float)rand() / (float)RAND_MAX) * ITA_SIZE - ITA_SIZE/2.0;
+			pos[a].y = ((float)rand() / (float)RAND_MAX) * 3.0 + 0.5;
+			pos[a].z = ((float)rand() / (float)RAND_MAX) * ITA_SIZE - ITA_SIZE/2.0;
+		}
 	}
+	rot++;
+	
 }
 
 //2Dの描画
 void Stage1::Disp2D(int Width, int Height){
 	glColor4f(0.0,0.0,0.0, 1.0);	//カラー
 	DRAW_STRING(10, Height-30, fps(), GLUT_BITMAP_TIMES_ROMAN_24);	//FPS表示
-	DRAW_STRING(10, Height-50, str, GLUT_BITMAP_TIMES_ROMAN_24);	//当たり判定表示
 }
 
 //入力処理
