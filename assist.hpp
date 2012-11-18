@@ -6,6 +6,7 @@
 #include <GL/freeglut.h>
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 #include "Model/XLoader.h"		//Xファイルロード系
 
 //定数

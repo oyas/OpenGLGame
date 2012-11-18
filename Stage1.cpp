@@ -6,7 +6,7 @@
 //定数定義
 #define ITA_SIZE 24.0	//床の大きさ
 #define KUNE_IDORYOU 0.2	//くねくね移動時の移動量
-#define KUNE_KAITEN 2.0	//回転量(単位は度)
+#define KUNE_CAMRA 2.0	//回転量(単位は度)
 
 
 //////////////////////
@@ -65,8 +65,12 @@ void Stage1::Disp()
 	//ライトの位置セット
 	glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
 	
+	//カメラの位置計算
+	Vector3 campos = kune.pos - kune_vec * 20.0;	//くねくねの後ろ方の位置
+	campos.y += 8.0;	//高さをつける
 	//カメラの位置セット
-	gluLookAt(0.0,5.0,-15.0, kune.pos.x,kune.pos.y,kune.pos.z, 0.0,1.0,0.0);
+	gluLookAt(campos.x, campos.y, campos.z, 
+		kune.pos.x,kune.pos.y,kune.pos.z, 0.0,1.0,0.0);
 	
 	//移動させる
 	kune.force = 0.0;
@@ -77,12 +81,12 @@ void Stage1::Disp()
 		kune.force -= kune_vec * KUNE_IDORYOU;
 	}
 	if( key_on & KEY_A ){	//左回転
-		kune.angle.y += KUNE_KAITEN;	//くねくねを回転
+		kune.angle.y += KUNE_CAMRA;	//くねくねを回転
 		kune_vec.x = sin(kune.angle.y/180 * M_PI);	//前方向ベクトルを修正「/180*M_PI」で度→radへ変換
 		kune_vec.z = cos(kune.angle.y/180 * M_PI);
 	}
 	if( key_on & KEY_D ){	//右回転
-		kune.angle.y -= KUNE_KAITEN;
+		kune.angle.y -= KUNE_CAMRA;	//くねくねを回転
 		kune_vec.x = sin(kune.angle.y/180 * M_PI);
 		kune_vec.z = cos(kune.angle.y/180 * M_PI);
 	}
