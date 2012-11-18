@@ -154,10 +154,13 @@ void Stage1::Disp()
 	
 	rot++;	//回転角度を増やしていく
 	
-	if( key_on & KEY_SPACE ){	//キーのチェック
-		sprintf(str, "SPACE ON");
+	//箱との当たり判定
+	Vector3 v = {0.0, 0.0, -2.0};
+	v -= kune.pos;
+	if( sqrt( v.x*v.x + v.y*v.y + v.z*v.z ) < 1.0 ){
+		sprintf(str, "hit!");
 	}else{
-		sprintf(str, "SPACE OFF");
+		sprintf(str, "distant");
 	}
 }
 
@@ -165,7 +168,7 @@ void Stage1::Disp()
 void Stage1::Disp2D(int Width, int Height){
 	glColor4f(0.0,0.0,0.0, 1.0);	//カラー
 	DRAW_STRING(10, Height-30, fps(), GLUT_BITMAP_TIMES_ROMAN_24);	//FPS表示
-	DRAW_STRING(10, Height-50, str, GLUT_BITMAP_TIMES_ROMAN_24);	//スペースキーの状態表示
+	DRAW_STRING(10, Height-50, str, GLUT_BITMAP_TIMES_ROMAN_24);	//当たり判定表示
 }
 
 //入力処理
